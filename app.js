@@ -6,9 +6,9 @@ const ejs = require("ejs");
 const _ = require("lodash");
 
 
-const homeStartingContent = "Lacus vel facilisis volutpat est velit egestas dui id ornare. Semper auctor neque vitae tempus quam. Sit amet cursus sit amet dictum sit amet justo. Viverra tellus in hac habitasse. Imperdiet proin fermentum leo vel orci porta. Donec ultrices tincidunt arcu non sodales neque sodales ut. Mattis molestie a iaculis at erat pellentesque adipiscing. Magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies. Adipiscing elit ut aliquam purus sit amet luctus venenatis lectus. Ultrices vitae auctor eu augue ut lectus arcu bibendum at. Odio euismod lacinia at quis risus sed vulputate odio ut. Cursus mattis molestie a iaculis at erat pellentesque adipiscing.";
-const aboutContent = "Hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Non diam phasellus vestibulum lorem sed. Platea dictumst quisque sagittis purus sit. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Mauris in aliquam sem fringilla. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Amet massa vitae tortor condimentum lacinia quis vel eros. Enim ut tellus elementum sagittis vitae. Mauris ultrices eros in cursus turpis massa tincidunt dui.";
-const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
+const homeStartingContent = "Hi, I’m so happy you’re here! My name is Upasana and I’m the twenty-something girl behind this lifestyle blog, created with the intention of being an online journal where I chat about everything I enjoy. I have something a bit different for you today. As I said here, I want to be more personal and let you take a glimpse into my daily life more often. As a quite nosy gal, I love getting to know the person behind a blog and their routines so I thought it would be interesting to share with you a typical day in my life. Let me warn you, it is a normal workday, nothing fancy or very entertaining. But I thought it could still be fun to share it nonetheless. Hope you find it interesting! Here is what I get up to on a normal weekday..";
+const aboutContent = "Hey, I’m Upasana. I’m a twenty-something a Btech Student snd a coder by day and lifestyle blogger by night in the pursuit of a wholehearted life. When I’m not working or blogging, you’ll most likely find me daydreaming, reading books or binge-watching Gilmore Girls. I also collect inspirational quotes and pretty stationery and find any excuse to make a list..I love personality tests. They’re fun and super insightful! I’m an INFJ according to Myers-Briggs and an Enneagram Type 6. Oh, and a Hufflepuff. I love traveling but I'm also a big homebody and most of the time you can find me reading, baking, doing a puzzle or daydreaming.";
+const contactContent = "Hi, can’t wait to hear from you. Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
 
 const app = express();
 
@@ -58,9 +58,13 @@ app.get("/posts/:postName", function(req,res){
         const storedTitle = _.lowerCase(post.title);
 
         if(storedTitle=== requestedTitle){
-          console.log("Match found!");
-        }else{
-          console.log("Not a Match!");
+          res.render("post",{
+            title: post.title,
+            content: post.content
+          });
+
+
+
         }
       });
   
