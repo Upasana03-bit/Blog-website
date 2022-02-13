@@ -4,6 +4,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const _ = require("lodash");
+const mongoose = require("mongoose");
+
+
 
 
 const homeStartingContent = "Hi, I’m so happy you’re here! My name is Upasana and I’m the twenty-something girl behind this lifestyle blog, created with the intention of being an online journal where I chat about everything I enjoy. I have something a bit different for you today. As I said here, I want to be more personal and let you take a glimpse into my daily life more often. As a quite nosy gal, I love getting to know the person behind a blog and their routines so I thought it would be interesting to share with you a typical day in my life. Let me warn you, it is a normal workday, nothing fancy or very entertaining. But I thought it could still be fun to share it nonetheless. Hope you find it interesting! Here is what I get up to on a normal weekday..";
@@ -17,57 +20,62 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-let posts = [];
+mongoose.connect("mongodb://localhost:27017/blogDB", {useNewUrlParser: true});
 
-app.get("/",function(req,res){
-  res.render("home",{
-    startingContent: homeStartingContent,
-    posts: posts
+const postSchema = {
+  title: String,
+  content: String
+};
+
+const Post = mongoose.model("Post", postSchema);
+
+app.get("/", function(req, res){
+
+  Post.find({}, function(err, posts){
+    res.render("home", {
+      startingContent: homeStartingContent,
+      posts: posts
+      });
   });
-  
 });
 
-app.get("/about",function(req,res){
-  res.render("about", {aboutContent:aboutContent });
-});
-
-app.get("/contact",function(req,res){
-  res.render("contact", {contactContent: contactContent });
-});
-
-app.get("/compose",function(req,res){
+app.get("/compose", function(req, res){
   res.render("compose");
 });
 
-app.post("/compose", function(req,res){
-  const post = {
+app.post("/compose", function(req, res){
+  const post = new Post({
     title: req.body.postTitle,
     content: req.body.postBody
-  };
+  });
 
-  posts.push(post);
 
-  res.redirect("/");
+  post.save(function(err){
+    if (!err){
+        res.redirect("/");
+    }
+  });
+});
+
+app.get("/posts/:postId", function(req, res){
+
+const requestedPostId = req.params.postId;
+
+  Post.findOne({_id: requestedPostId}, function(err, post){
+    res.render("post", {
+      title: post.title,
+      content: post.content
+    });
+  });
 
 });
 
-app.get("/posts/:postName", function(req,res){
-      const requestedTitle = _.lowerCase(req.params.postName);
+app.get("/about", function(req, res){
+  res.render("about", {aboutContent: aboutContent});
+});
 
-      posts.forEach(function(post){
-        const storedTitle = _.lowerCase(post.title);
-
-        if(storedTitle=== requestedTitle){
-          res.render("post",{
-            title: post.title,
-            content: post.content
-          });
-
-
-
-        }
-      });
-  
+app.get("/contact", function(req, res){
+  res.render("contact", {contactContent: contactContent});
 });
 
 
